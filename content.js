@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
 //  THE GRAMOPHONE WORKS — KIOSK CONTENT
 //  Edit this file to update what shows on screen.
-//  Save, then refresh the browser (or it auto-reloads every 30 min).
+//  Save, then refresh the browser to apply changes.
 //
 //  TO ACTIVATE A TENANT PHOTO:
 //   1. Drop the image in the images/ folder
@@ -101,8 +101,8 @@ window.KIOSK_CONTENT = {
   eventsTitle:   "Sessions & Events",
 
   upcomingEvents: [
-    { date: "2026-06-28", title: "Open Studios" }
-    // Add more from kindredstudios.co.uk/calendar as they appear
+    // Add dated events from kindredstudios.co.uk/calendar as they appear
+    // e.g. { date: "2026-07-12", title: "Open Studios" }
   ],
 
   recurringEvents: [

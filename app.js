@@ -7,7 +7,7 @@
    ───────────────────────────────────────────────── */
 
 const DEFAULT_DURATION  = 13_000;
-const AUTO_RELOAD_MS    = 50 * 60_000; // reload page every 30 min for content updates
+// Auto-reload removed — kiosk stays on directory screen indefinitely
 
 const DEFAULT_ROTATION = [
   { type: "directory", duration: 22_000 },
@@ -285,9 +285,6 @@ function init() {
   rotationIdx = 0;
   renderEntry(getRotation()[0]);
   scheduleAdvance();
-
-  // Auto-reload the page every 30 min so content.js changes appear
-  setTimeout(() => location.reload(), AUTO_RELOAD_MS);
 
   // Fullscreen on first click (browsers require a user gesture)
   document.addEventListener("click", () => {

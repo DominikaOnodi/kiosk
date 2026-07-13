@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-**Client:** The Gramophone Works, Ladbroke Grove, West London (W10 5BU)  
+**Client:** The Gramophone Works, 326 Kensal Rd, West London (W10 5BZ)  
 **Managed by:** TSP (building management company)  
 **Purpose:** Fullscreen reception kiosk display — auto-rotates through 4 screen types on a loop  
 **Type:** Static HTML/CSS/JS — no framework, no build step, no server required
@@ -34,10 +34,10 @@
 
 ### Screen rotation (defined in `content.js` → `screens` array)
 1. **Directory** — floor-by-floor tenant list with TSP logo (shown longest: 22s)
-2. **Story** — one building fact at a time, large italic serif, cycles through `facts[]`
-3. **Gallery (index 0)** — building exterior photo (13s)
-4. **Gallery (index 1)** — second building info photo, placeholder until image added (13s)
-5. **Events** — Kindred Studios recurring sessions (13s)
+2. **Story** — one building fact at a time, large italic serif, cycles through `facts[]` (12 facts, sourced from the brochure PDF)
+3. **Events** — Kindred Studios recurring sessions (13s)
+
+Gallery screens (building/tenant photos) are defined in `gallery[]` but not currently in the rotation — add an entry like `{ type: "gallery", galleryIndex: N, duration: 13000 }` to `screens[]` to bring one back.
 
 ### Key behaviour
 - Transitions: 800ms CSS opacity crossfade
@@ -118,12 +118,20 @@ Edit `content.js` only. Never touch the other files unless changing layout/logic
 - Deployed to Netlify via GitHub (`gramophonekiosk.netlify.app`) — branch `main`, publish dir `.`, no build command
 - Building-info image updated locally but not committed — pushed in this session; always `git add` + `git commit` + `git push` after replacing image files
 
+### Session 3 — 13 July 2026
+- Removed the building-info image slide from rotation — active rotation is now 3 slides: Directory (22s) → Building fact (13s) → Kindred events (13s)
+- Expanded `facts[]` from 3 to 12 entries, sourced from the official brochure PDF (thegramophoneworks.com), covering sustainability stats (655 tonnes CO₂ saved, green roof, PV power, solar shading), building features (cycle park, terraces, members' club, double-height reception, tower meeting room), and current tenants
+- `gallery` array and `building-info.png` entry left in place but inactive (same pattern already used for not-yet-added tenant photos) — easy to bring back into `screens[]` later
+- Confirmed correct address is 326 Kensal Rd, W10 5BZ (brochure was right) — updated `content.js` and this file
+- Added four one-off Kindred Studios events for July, given directly by the user (not yet listed on kindredstudios.co.uk/calendar): 15/07 Sculpting Hearts, 21/07 Adult Football, 23/07 Growing Herbs, 30/07 Reggae Aerobics. Recurring events (Life Drawing, Qi Gong, Choir, Artist Support Group) unchanged
+- Pushed to git
+
 ### In Progress
-*(nothing — clean end to session 2)*
+*(nothing — clean end to session 3)*
 
 ### Next Up
 - Tenant photos: Kindred Studios, Emilia Wickstead, Perfect Moment — drop images in `images/`, add to `screens[]` in `content.js`
-- Kindred events — update `content.js` when specific dated events are published on their calendar
+- Kindred events — the four July one-offs above are past-date-filtered automatically; check kindredstudios.co.uk/calendar for August events as the month turns
 - Consider custom domain / tablet mounting setup for permanent display
 
 ---

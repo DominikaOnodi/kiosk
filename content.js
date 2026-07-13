@@ -13,7 +13,7 @@ window.KIOSK_CONTENT = {
 
   building: {
     name:    "The Gramophone Works",
-    address: "Ladbroke Grove, W10 5BU"
+    address: "326 Kensal Rd, W10 5BZ"
   },
 
   // ── Rotation ──────────────────────────────────────────
@@ -24,7 +24,6 @@ window.KIOSK_CONTENT = {
   screens: [
     { type: "directory", duration: 22000 },
     { type: "story",     duration: 13000 },
-    { type: "gallery",   galleryIndex: 1, duration: 13000 },
     { type: "events",    duration: 13000 }
   ],
 
@@ -46,13 +45,24 @@ window.KIOSK_CONTENT = {
 
   facts: [
     "64,000 sq ft across six floors, overlooking the Grand Union Canal.",
-    "BREEAM and EPC A certified — one of West London's most sustainable creative workplaces.",
-    "Carbon-neutral timber structure. NLA Environmental Prize, 2021."
+    "BREEAM Excellent and EPC A certified — one of West London's most sustainable creative workplaces.",
+    "Carbon-neutral timber structure. NLA Environmental Prize, 2021.",
+    "655 tonnes of CO₂ saved by retaining the building's original concrete columns.",
+    "A green roof supports canal-side ecology, alongside photovoltaic power and solar shading.",
+    "Low-energy LED lighting with sensors and mobile phone access control throughout.",
+    "Cycle park with 90 spaces and 7 showers for those arriving by bike.",
+    "Full-length terraces with exceptional views across the Grand Union Canal.",
+    "A creative members' club on the third floor, with a canal-side terrace and event space off reception.",
+    "A double-height reception welcomes visitors on the ground floor.",
+    "The feature meeting room sits within a historic tower — a nod to the building's heritage.",
+    "Home to Kindred Studios, Emilia Wickstead and Perfect Moment — distinct creative businesses under one roof."
   ],
 
   // ── Gallery images ────────────────────────────────────
-  // Index 0 and 1 are active (referenced in screens above).
-  // Indices 2–5 are ready but not shown yet — add them to screens when photos arrive.
+  // No gallery screens are active in the rotation right now (the building-info
+  // image slide was removed — its facts were folded into the story rotation above).
+  // Add an entry to screens[] (e.g. { type: "gallery", galleryIndex: 2, duration: 13000 })
+  // to bring any of these back once tenant photos arrive.
 
   gallery: [
     {
@@ -103,6 +113,10 @@ window.KIOSK_CONTENT = {
   upcomingEvents: [
     // Add dated events from kindredstudios.co.uk/calendar as they appear
     // e.g. { date: "2026-07-12", title: "Open Studios" }
+    { date: "2026-07-15", title: "Sculpting Hearts" },
+    { date: "2026-07-21", title: "Adult Football" },
+    { date: "2026-07-23", title: "Growing Herbs" },
+    { date: "2026-07-30", title: "Reggae Aerobics" }
   ],
 
   recurringEvents: [

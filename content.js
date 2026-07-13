@@ -45,7 +45,7 @@ window.KIOSK_CONTENT = {
 
   facts: [
     "64,000 sq ft across six floors, overlooking the Grand Union Canal.",
-    "BREEAM Excellent and EPC A certified — one of West London's most sustainable creative workplaces.",
+    "BREEAM Excellent and EPC A certified — West London's most sustainable creative workplace.",
     "Carbon-neutral timber structure. NLA Environmental Prize, 2021.",
     "655 tonnes of CO₂ saved by retaining the building's original concrete columns.",
     "A green roof supports canal-side ecology, alongside photovoltaic power and solar shading.",

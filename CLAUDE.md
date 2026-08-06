@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-**Client:** The Gramophone Works, Ladbroke Grove, West London (W10 5BU)  
+**Client:** The Gramophone Works, 326 Kensal Rd, West London (W10 5BZ)  
 **Managed by:** TSP (building management company)  
 **Purpose:** Fullscreen reception kiosk display — auto-rotates through 4 screen types on a loop  
 **Type:** Static HTML/CSS/JS — no framework, no build step, no server required
@@ -32,48 +32,37 @@
 
 ## How the Kiosk Works
 
-### Screen rotation (defined in `content.js` → `screens` array)
-1. **Directory** — floor-by-floor tenant list with TSP logo (shown longest: 22s)
-2. **Story** — one building fact at a time, large italic serif, cycles through `facts[]`
-3. **Gallery (index 0)** — building exterior photo (13s)
-4. **Gallery (index 1)** — second building info photo, placeholder until image added (13s)
-5. **Events** — Kindred Studios recurring sessions (13s)
+### Screen rotation (defined in `content.js` → `screens` array — current as of session 4)
+1. **Directory** — floor-by-floor tenant list, tenant logos instead of names where available, TSP logo top-right (shown longest: 22s)
+2. **Story** — one building fact at a time, cycles through `facts[]` (12 facts)
+3. **Gallery (index 2)** — Kindred Studios' "Web of Life" exhibition photo (13s)
+4. **Gallery (index 4, 5)** — Emilia Wickstead bridal editorial, split layout (text left / photo right) (13s each)
+5. **Gallery (index 8)** — Perfect Moment brand film, muted/looping, hero overlay text, logo in footer (14s)
+
+Events screen is paused (commented out in `screens[]`) — only Life Drawing is weekly right now, not enough for its own slide.
 
 ### Key behaviour
 - Transitions: 800ms CSS opacity crossfade
 - Auto-reload: page reloads every 30 minutes to pick up `content.js` changes
 - Fullscreen: triggered on first click (browser security requirement)
 - No server needed: content loaded via `<script src="content.js">`, not fetch()
+- Gallery items support optional `fact`, `eyebrow`, `logo` (+ `logoHeight`/`logoPosition: "footer"` overrides), `layout: "split"`, `images: [a, b]` (side-by-side diptych), `video` (local file or YouTube), `videoSize`, and `overlayText` (hero headline on the photo/video) — see comments in `content.js` for each
 
----
-
-## Files
-
-```
-gramophone-kiosk/
-├── index.html       — 4-screen shell (no content hardcoded here)
-├── styles.css       — all visual design
-├── app.js           — rotation logic, renderers, transitions
-├── content.js       — ALL content lives here (edit to update kiosk)
-├── content.json     — inactive reference copy (content.js is the live one)
-└── images/
-    ├── tsp-logo.png          ✓ added
-    ├── building-exterior.jpg ✓ added
-    ├── building-info.jpg     ← ADD: second building image (currently placeholder)
-    ├── kindred-01.jpg        ← waiting for photos
-    ├── kindred-02.jpg        ← waiting for photos
-    ├── emilia-01.jpg         ← waiting for photos
-    └── perfect-moment-01.jpg ← waiting for photos
-```
+### Deployment
+- Live at **dominikaonodi.github.io/kiosk** (repo: `github.com/DominikaOnodi/kiosk`, branch `main`)
+- Deploys via a GitHub Actions workflow (`.github/workflows/pages.yml`) — pushing to `main` triggers it automatically, usually live within ~1 minute
+- The legacy "Deploy from a branch" Pages mechanism was unreliable (repeated unexplained timeouts/cancellations even with a tiny payload) — don't switch back to it; Actions-based deploy has been solid since session 4
+- Netlify (`gramophonekiosk.netlify.app`) exists but was never properly connected — still serving a stale old snapshot, not part of the real deploy path. Ignore it unless asked to fix it.
+- `gramophone-kiosk-master/` (the folder one level up containing this folder) is **not** part of the repo — only `gramophone-kiosk/` itself is tracked in git
 
 ### How to update content
-Edit `content.js` only. Never touch the other files unless changing layout/logic.
+Edit `content.js`, commit, and push to `main` — that's it, no build step.
 
 ### How to activate a new tenant photo
-1. Drop image in `images/` (e.g. `kindred-01.jpg`)
-2. In `content.js`, find the matching gallery entry and confirm the path is correct
-3. In `content.js → screens`, add: `{ type: "gallery", galleryIndex: 2, duration: 13000 }` (where 2 = the array index of that gallery entry)
-4. Refresh the browser
+1. Drop image in `images/` (or video in `videos/`)
+2. In `content.js`, add/edit the matching `gallery[]` entry
+3. In `content.js → screens`, add a matching `{ type: "gallery", galleryIndex: N, duration: 13000 }`
+4. Commit and push
 
 ---
 
@@ -158,21 +147,28 @@ Edit `content.js` only. Never touch the other files unless changing layout/logic
 - **Paused the events (Kindred schedule) screen** — only Life Drawing is still weekly, not enough content to justify its own slide right now. Commented out in `screens[]` rather than deleted; the underlying `recurringEvents`/`upcomingEvents` data is untouched (Qi Gong / Choir / Artist Support Group entries are still there but unverified — worth checking if they're still running before reactivating).
 - Rotation is now: Directory → Story → Kindred exhibition photo → Emilia bridal ×2 (split) → Perfect Moment brand film (with "Ski in your Perfect Moment" overlay) → Perfect Moment diptych (gallery indices 2, 4, 5, 9, 8)
 
+- **Connected the project to git and GitHub Pages for the first time.** This local folder had never been a git repo. Discovered the GitHub repo (`dominikaonodi/gramophone-kiosk`, since renamed to `DominikaOnodi/kiosk`) had **two unrelated histories**: `master` (an old messy "Add files via upload" snapshot with the same duplicate-folder problem cleaned up earlier this session) and `main` (a separate, more advanced line of building-content work — correct address, a rich 12-item `facts[]` — made independently from a different computer, entirely disconnected from this session's tenant-page work). Reconciled by hand: kept all of this session's tenant work, pulled in `main`'s corrected `building.address` ("326 Kensal Rd, W10 5BZ" — independently confirmed by the Kindred exhibition poster itself) and full facts list, restored `images/building-info.png` (existed on `main`, was missing locally). Pushed on top of `main`.
+- **GitHub Pages deployment saga:** the classic "Deploy from a branch" Pages mechanism failed repeatedly — `Timeout reached, aborting!` and later `Deployment cancelled.` — regardless of payload size (even after cutting video weight by 80%) or a full Pages settings reset. No GitHub-wide incident reported. Root cause never fully identified. Fixed by replacing it with an explicit **GitHub Actions workflow** (`.github/workflows/pages.yml`, standard checkout → upload-pages-artifact → deploy-pages), with `Settings → Pages → Source` switched to "GitHub Actions". Deploys have been fast and reliable since (~1 minute). **Don't switch back to the legacy branch-deploy mechanism.**
+- **Compressed the video assets** (installed ffmpeg via winget) while debugging the above: Perfect Moment's brand film re-encoded at CRF 23 with audio stripped (it's always muted anyway) — 19MB → 8.7MB, visually identical (spot-checked a frame). Emilia's brand film (27MB, already paused for quality reasons) removed from git tracking entirely via `.gitignore` — kept locally, not shipped, since most of its 6.5min length was never even seen when it was active.
+- **Directory tenant logos:** floor list now shows each tenant's official logo instead of their name (Kindred, Emilia, Perfect Moment — Ground floor stays as text, those are building amenities not brands). New tenant schema: `{ name, logo, logoHeight? }` alongside the existing plain-string option; falls back to text if a logo fails to load. Perfect Moment's logo file has more internal padding than the others so it read smaller at the same height — added a `logoHeight` override.
+- **Emilia split-layout text enlarged** — fact/name/meta were too small to read on the actual big screen at reception.
+- **Perfect Moment brand film footer redesigned:** logo moved from a top-left overlay on the video into the footer caption bar (new `logoPosition: "footer"` field, reusable), enlarged twice more per feedback, "Watch" eyebrow removed, redundant "Perfect Moment" name text removed (`name: ""`) since the logo already shows it — footer now just shows the logo + fact + medium/floor meta.
+- Fixed a stale address in this file's own Project Overview section (was still "Ladbroke Grove, W10 5BU").
+
 ### In Progress
 *(nothing — clean end to session 4)*
 
 ### Next Up
 - Client is gathering more material for **both Kindred and Perfect Moment** — expect more photos/video next session
 - **Events screen paused** (commented out in `screens[]`) — re-add once the weekly schedule has more than just Life Drawing, and double-check the other recurring entries are still accurate first
-- **Emilia brand film paused** (gallery index 6 in `content.js`, not in `screens[]`) — waiting on a higher-quality clip; add back to `screens[]` once one arrives (right before index 4, per the comment in `content.js`)
+- **Emilia brand film paused, untracked in git** (gallery index 6 in `content.js`, not in `screens[]`, excluded via `.gitignore`) — waiting on a higher-quality clip; once one arrives, remove the `.gitignore` line, add the file to `videos/`, and add `{ type: "gallery", galleryIndex: 6, duration: N }` back to `screens[]`
 - **Perfect Moment diptych (index 8) has no fact/eyebrow** — add one if a caption is wanted, nothing was invented since there's no source copy for these photos yet
-- **Swapping the Perfect Moment brand film:** just replace the `video` field (gallery index 9) with a new local file path or YouTube URL/ID — no need to touch `screens[]` (though duration may need adjusting to match the new clip's length)
 - Perfect Moment photos still pending — `images/perfect-moment-01.jpg` (gallery index 7) referenced but not yet added
 - Kindred's second photo slot still open (`kindred-02.jpg`, gallery index 3) — add one and wire into `screens[]` when available
-- Building-info photo (gallery index 1) still pending if that slide is wanted back
-- Consider whether the `gramophone-kiosk-master/gramophone-kiosk/` nested folder structure should be flattened — flagged as a possible source of confusion but not changed yet (unclear how the Netlify/GitHub deploy is wired to this path)
-- Emilia's brand film is 27MB — sitting unused in `videos/` while paused; fine locally, but worth cleaning up or replacing rather than letting it bloat a future Netlify deploy
-- **Careful when dropping new files into `images/` or `videos/` via File Explorer** — that's how the folder got nested inside itself this session; worth a quick glance at the folder tree after adding new assets
+- Building-info photo now exists (`images/building-info.png`, recovered from `main`) but isn't shown anywhere — add a `screens[]` entry if that slide is wanted back
+- The old `master` branch on GitHub still exists, untouched, with the old messy duplicate-folder snapshot — harmless to leave, but could be deleted once confident nothing there is needed
+- Netlify (`gramophonekiosk.netlify.app`) is still disconnected/stale — either properly connect it to `main` or ignore it; not part of the real deploy path right now
+- Consider whether the `gramophone-kiosk-master/gramophone-kiosk/` nested local folder structure should be flattened — only `gramophone-kiosk/` is actually the git repo, the outer wrapper folder isn't part of it at all
 - Consider custom domain / tablet mounting setup for permanent display
 
 ---

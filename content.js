@@ -163,7 +163,6 @@ window.KIOSK_CONTENT = {
       floor:        "Floor 5",
       logo:         "images/perfect-moment-logo.png",
       logoPosition: "footer",
-      eyebrow:      "Watch",
       fact:         "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
       overlayText:  "Ski in your Perfect Moment"
     }

@@ -388,7 +388,7 @@ html { scrollbar-width: none; }
 }
 
 .screen--gallery.logo-footer .gallery-logo-img {
-  height: clamp(44px, 5.5vh, 80px);
+  height: clamp(52px, 6.4vh, 96px);
 }
 
 /* Caption bar at bottom */

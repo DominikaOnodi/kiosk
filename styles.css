@@ -149,6 +149,16 @@ html { scrollbar-width: none; }
   color: var(--ink-mid);
 }
 
+/* Tenant logo, shown in place of the name where one is available */
+.tenant-logo-img {
+  height: clamp(32px, 3.4vw, 56px);
+  width: auto;
+  display: block;
+  filter: invert(1);
+  mix-blend-mode: screen;
+  opacity: 0.92;
+}
+
 /* TSP logo — top-right */
 .tsp-wordmark {
   position: absolute;
@@ -464,12 +474,25 @@ html { scrollbar-width: none; }
 
 .layout-split .gallery-fact {
   max-width: none;
+  font-size: clamp(22px, 2.4vw, 36px);
 }
 
 .layout-split .gallery-caption-row {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
+}
+
+.layout-split .gallery-name {
+  font-size: clamp(28px, 2.8vw, 44px);
+}
+
+.layout-split .gallery-meta {
+  font-size: clamp(15px, 1.1vw, 19px);
+}
+
+.layout-split .gallery-eyebrow {
+  font-size: clamp(13px, 0.8vw, 16px);
 }
 
 

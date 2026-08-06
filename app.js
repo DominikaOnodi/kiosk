@@ -60,7 +60,7 @@ function renderDirectory() {
   if (!data) return;
 
   document.getElementById("dir-eyebrow").textContent =
-    data.building?.name ?? "The Gramophone Works";
+    data.building?.name ?? "The Gramophone Works"; 
 
   const list = document.getElementById("dir-floors");
   list.innerHTML = "";
@@ -84,11 +84,27 @@ function renderDirectory() {
       span.innerHTML = (floor.tenants ?? []).map(escHtml).join("&nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp;");
       tenantsEl.appendChild(span);
     } else {
-      (floor.tenants ?? []).forEach(name => {
-        const span = document.createElement("span");
-        span.className   = "tenant";
-        span.textContent = name;
-        tenantsEl.appendChild(span);
+      // A tenant is either a plain string (rendered as text) or
+      // { name, logo } (rendered as their logo, with text fallback).
+      (floor.tenants ?? []).forEach(t => {
+        if (t && typeof t === "object" && t.logo) {
+          const img   = document.createElement("img");
+          img.className = "tenant-logo-img";
+          img.alt     = t.name ?? "";
+          img.onerror = () => {
+            const span = document.createElement("span");
+            span.className   = "tenant";
+            span.textContent = t.name ?? "";
+            img.replaceWith(span);
+          };
+          tenantsEl.appendChild(img);
+          img.src = t.logo;
+        } else {
+          const span = document.createElement("span");
+          span.className   = "tenant";
+          span.textContent = typeof t === "string" ? t : (t?.name ?? "");
+          tenantsEl.appendChild(span);
+        }
       });
     }
 

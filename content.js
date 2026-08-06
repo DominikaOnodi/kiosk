@@ -36,11 +36,13 @@ window.KIOSK_CONTENT = {
 
   // ── Floor directory ───────────────────────────────────
 
+  // A tenant is either a plain string (shown as text) or { name, logo }
+  // (shown as their logo — falls back to text if the image fails to load).
   floors: [
     { floor: "Ground", tenants: ["Café", "Reception", "Kindred Workshop Rooms"] },
-    { floor: "1–3",    tenants: ["Kindred Studios"] },
-    { floor: "4",      tenants: ["Emilia Wickstead"] },
-    { floor: "5",      tenants: ["Perfect Moment"] }
+    { floor: "1–3",    tenants: [{ name: "Kindred Studios",  logo: "images/kindred-logo.png" }] },
+    { floor: "4",      tenants: [{ name: "Emilia Wickstead", logo: "images/emilia-logo.png" }] },
+    { floor: "5",      tenants: [{ name: "Perfect Moment",   logo: "images/perfect-moment-logo.png" }] }
   ],
 
   // ── Story screen background ───────────────────────────

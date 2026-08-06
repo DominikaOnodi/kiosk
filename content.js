@@ -42,7 +42,9 @@ window.KIOSK_CONTENT = {
     { floor: "Ground", tenants: ["Café", "Reception", "Kindred Workshop Rooms"] },
     { floor: "1–3",    tenants: [{ name: "Kindred Studios",  logo: "images/kindred-logo.png" }] },
     { floor: "4",      tenants: [{ name: "Emilia Wickstead", logo: "images/emilia-logo.png" }] },
-    { floor: "5",      tenants: [{ name: "Perfect Moment",   logo: "images/perfect-moment-logo.png" }] }
+    // logoHeight overrides the default size — Perfect Moment's logo file has
+    // more internal padding than the others, so it reads smaller at the same height.
+    { floor: "5",      tenants: [{ name: "Perfect Moment", logo: "images/perfect-moment-logo.png", logoHeight: "clamp(48px, 5.2vw, 84px)" }] }
   ],
 
   // ── Story screen background ───────────────────────────
@@ -155,14 +157,15 @@ window.KIOSK_CONTENT = {
     },
     // Brand film — plays muted and looping. Swap the `video` file any time.
     {
-      video:       "videos/perfect-moment-brand-film.mp4",
-      name:        "Perfect Moment",
-      medium:      "Brand Film",
-      floor:       "Floor 5",
-      logo:        "images/perfect-moment-logo.png",
-      eyebrow:     "Watch",
-      fact:        "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
-      overlayText: "Ski in your Perfect Moment"
+      video:        "videos/perfect-moment-brand-film.mp4",
+      name:         "Perfect Moment",
+      medium:       "Brand Film",
+      floor:        "Floor 5",
+      logo:         "images/perfect-moment-logo.png",
+      logoPosition: "footer",
+      eyebrow:      "Watch",
+      fact:         "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
+      overlayText:  "Ski in your Perfect Moment"
     }
   ],
 

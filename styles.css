@@ -380,6 +380,17 @@ html { scrollbar-width: none; }
   opacity: 0.85;
 }
 
+/* Logo shown in-flow within the footer caption bar instead of overlaid on
+   the photo/video — set via gallery item's `logoPosition: "footer"`. */
+.screen--gallery.logo-footer .gallery-logo-wrap {
+  position: static;
+  margin-bottom: clamp(14px, 2vh, 24px);
+}
+
+.screen--gallery.logo-footer .gallery-logo-img {
+  height: clamp(44px, 5.5vh, 80px);
+}
+
 /* Caption bar at bottom */
 .gallery-caption {
   flex-shrink: 0;

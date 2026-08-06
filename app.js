@@ -91,6 +91,7 @@ function renderDirectory() {
           const img   = document.createElement("img");
           img.className = "tenant-logo-img";
           img.alt     = t.name ?? "";
+          if (t.logoHeight) img.style.height = t.logoHeight;
           img.onerror = () => {
             const span = document.createElement("span");
             span.className   = "tenant";
@@ -161,6 +162,7 @@ function renderGallery(idx) {
   if (!item) return;
 
   SCREENS.gallery.classList.toggle("layout-split", item.layout === "split");
+  SCREENS.gallery.classList.toggle("logo-footer", item.logoPosition === "footer");
 
   const media = document.getElementById("gallery-media");
 

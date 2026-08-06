@@ -158,7 +158,7 @@ window.KIOSK_CONTENT = {
     // Brand film — plays muted and looping. Swap the `video` file any time.
     {
       video:        "videos/perfect-moment-brand-film.mp4",
-      name:         "Perfect Moment",
+      name:         "", // logo (in footer) already shows the name — no need to repeat it as text
       medium:       "Brand Film",
       floor:        "Floor 5",
       logo:         "images/perfect-moment-logo.png",

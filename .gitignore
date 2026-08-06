@@ -1,2 +1,7 @@
 .DS_Store
 Thumbs.db
+
+# Paused/unused — kept locally, not shipped to the deploy (was 27MB and
+# contributing to GitHub Pages deploy timeouts). Remove this line once a
+# replacement clip is ready and the Emilia brand-film slide is reactivated.
+videos/emilia-brand-film.mp4

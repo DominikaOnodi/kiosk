@@ -7,7 +7,7 @@
    ───────────────────────────────────────────────── */
 
 const DEFAULT_DURATION  = 13_000;
-// Auto-reload removed — kiosk stays on directory screen indefinitely
+const AUTO_RELOAD_MS    = 50 * 60_000; // reload page every 30 min for content updates
 
 const DEFAULT_ROTATION = [
   { type: "directory", duration: 22_000 },
@@ -144,28 +144,115 @@ function renderGallery(idx) {
   const item  = items[idx ?? 0];
   if (!item) return;
 
-  const visual = document.getElementById("gallery-visual");
+  SCREENS.gallery.classList.toggle("layout-split", item.layout === "split");
 
-  if (item.image) {
+  const media = document.getElementById("gallery-media");
+
+  if (item.images?.length) {
+    media.innerHTML = "";
+    media.appendChild(galleryDuo(item.images, item.name));
+  } else if (item.video) {
+    media.innerHTML = "";
+    media.appendChild(videoEmbed(item.video, item.videoSize));
+  } else if (item.image) {
     const img    = document.createElement("img");
     img.alt      = item.name ?? "";
-    img.onerror  = () => { visual.innerHTML = galleryPlaceholder(item.name); };
-    visual.innerHTML = "";
-    visual.appendChild(img);
+    img.onerror  = () => { media.innerHTML = galleryPlaceholder(item.name); };
+    media.innerHTML = "";
+    media.appendChild(img);
     img.src = item.image; // set after append so onerror fires reliably
   } else {
-    visual.innerHTML = galleryPlaceholder(item.name);
+    media.innerHTML = galleryPlaceholder(item.name);
   }
+
+  const overlayEl = document.getElementById("gallery-overlay");
+  overlayEl.textContent  = item.overlayText ?? "";
+  overlayEl.style.display = item.overlayText ? "flex" : "none";
 
   document.getElementById("gallery-name").textContent = item.name ?? "";
   document.getElementById("gallery-meta").textContent =
     [item.medium, item.floor].filter(Boolean).join("  ·  ");
+
+  const eyebrowEl = document.getElementById("gallery-eyebrow");
+  eyebrowEl.textContent  = item.eyebrow ?? "";
+  eyebrowEl.style.display = item.eyebrow ? "block" : "none";
+
+  const factEl = document.getElementById("gallery-fact");
+  factEl.textContent  = item.fact ?? "";
+  factEl.style.display = item.fact ? "block" : "none";
+
+  const logoWrap = document.getElementById("gallery-logo-wrap");
+  const logoImg  = document.getElementById("gallery-logo-img");
+  if (item.logo) {
+    logoImg.alt = item.name ?? "";
+    logoImg.src = item.logo;
+    logoWrap.style.display = "block";
+  } else {
+    logoWrap.style.display = "none";
+  }
 }
 
 function galleryPlaceholder(name) {
   return `<div class="gallery-placeholder">
     <span class="gallery-placeholder-label">${escHtml(name ?? "Image")}</span>
   </div>`;
+}
+
+// Editorial diptych — two photos side by side, full height, thin seam between.
+// Each panel crops independently (object-fit: cover) so a broken image only
+// blanks its own half rather than the whole slide.
+function galleryDuo(images, name) {
+  const duo = document.createElement("div");
+  duo.className = "gallery-duo";
+  images.forEach(src => {
+    const img   = document.createElement("img");
+    img.alt     = name ?? "";
+    img.onerror = () => { img.style.visibility = "hidden"; };
+    duo.appendChild(img);
+    img.src = src;
+  });
+  return duo;
+}
+
+// item.video can be a local video file (images/videos/*.mp4 etc.) or a
+// YouTube URL/bare ID — local files play natively; YouTube falls back to
+// an embedded player. Muted + looping either way, same footprint as a photo.
+// `sizePct` (e.g. "60%") overrides the default 88% display size — handy for
+// lower-resolution source clips that look blurry stretched to the default.
+// Re-created (and restarted) each time this slide comes around in the rotation.
+function videoEmbed(src, sizePct) {
+  if (/\.(mp4|webm|mov|m4v)(\?.*)?$/i.test(src)) {
+    const video = document.createElement("video");
+    video.className   = "gallery-video";
+    video.autoplay    = true;
+    video.muted       = true;
+    video.loop        = true;
+    video.playsInline = true;
+    video.src         = src;
+    if (sizePct) { video.style.width = sizePct; video.style.height = sizePct; }
+    return video;
+  }
+
+  const videoId = youtubeId(src);
+  const iframe  = document.createElement("iframe");
+  iframe.className = "gallery-video";
+  iframe.src =
+    `https://www.youtube-nocookie.com/embed/${videoId}` +
+    `?autoplay=1&mute=1&loop=1&playlist=${videoId}` +
+    `&controls=0&modestbranding=1&rel=0&playsinline=1&iv_load_policy=3`;
+  iframe.setAttribute("allow", "autoplay; encrypted-media");
+  iframe.setAttribute("frameborder", "0");
+  if (sizePct) { iframe.style.width = sizePct; iframe.style.height = sizePct; }
+  return iframe;
+}
+
+// Accepts a full YouTube URL (watch/youtu.be/embed) or a bare 11-char video ID.
+function youtubeId(input) {
+  const fromUrl = input.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube(?:-nocookie)?\.com\/embed\/)([\w-]{11})/
+  );
+  if (fromUrl) return fromUrl[1];
+  return /^[\w-]{11}$/.test(input) ? input : null;
 }
 
 function getEventsToShow() {
@@ -285,6 +372,9 @@ function init() {
   rotationIdx = 0;
   renderEntry(getRotation()[0]);
   scheduleAdvance();
+
+  // Auto-reload the page every 30 min so content.js changes appear
+  setTimeout(() => location.reload(), AUTO_RELOAD_MS);
 
   // Fullscreen on first click (browsers require a user gesture)
   document.addEventListener("click", () => {

@@ -1,7 +1,7 @@
 // ──────────────────────────────────────────────────────────
 //  THE GRAMOPHONE WORKS — KIOSK CONTENT
 //  Edit this file to update what shows on screen.
-//  Save, then refresh the browser to apply changes.
+//  Save, then refresh the browser (or it auto-reloads every 30 min).
 //
 //  TO ACTIVATE A TENANT PHOTO:
 //   1. Drop the image in the images/ folder
@@ -24,7 +24,14 @@ window.KIOSK_CONTENT = {
   screens: [
     { type: "directory", duration: 22000 },
     { type: "story",     duration: 13000 },
-    { type: "events",    duration: 13000 }
+    // Events screen paused — only Life Drawing is still weekly, not enough
+    // for its own slide right now. Add back once the schedule fills out:
+    // { type: "events", duration: 20000 },
+    { type: "gallery",   galleryIndex: 2, duration: 13000 },
+    { type: "gallery",   galleryIndex: 4, duration: 13000 },
+    { type: "gallery",   galleryIndex: 5, duration: 13000 },
+    { type: "gallery",   galleryIndex: 9, duration: 14000 },
+    { type: "gallery",   galleryIndex: 8, duration: 16000 }
   ],
 
   // ── Floor directory ───────────────────────────────────
@@ -59,10 +66,17 @@ window.KIOSK_CONTENT = {
   ],
 
   // ── Gallery images ────────────────────────────────────
-  // No gallery screens are active in the rotation right now (the building-info
-  // image slide was removed — its facts were folded into the story rotation above).
-  // Add an entry to screens[] (e.g. { type: "gallery", galleryIndex: 2, duration: 13000 })
-  // to bring any of these back once tenant photos arrive.
+  // Indices 2 (Kindred), 4, 5 (Emilia photos), 8 (Perfect Moment diptych) and 9
+  // (Perfect Moment brand film) are active (referenced in screens above).
+  // Index 0 (building exterior) is used as the story background only, not a gallery slide.
+  // Indices 1 (building info), 3 (Kindred, second photo), 6 (Emilia brand film —
+  // paused, too blurry), 7 (Perfect Moment photo) are ready but not shown yet —
+  // add a matching { type: "gallery", galleryIndex: N, duration: 13000 } to
+  // screens[] once photos/a better video arrive.
+  // `images: [a, b]` renders a side-by-side diptych instead of a single photo.
+  // `video` accepts a local file (e.g. "videos/name.mp4") or a YouTube URL/bare ID —
+  // either way it plays muted and looping. Swap Perfect Moment's diptych (index 8) or
+  // film (index 9) any time by just replacing those fields, no need to touch screens[].
 
   gallery: [
     {
@@ -78,9 +92,9 @@ window.KIOSK_CONTENT = {
       floor:  ""
     },
     {
-      image:  "images/kindred-01.jpg",
+      image:  "images/kindred-event.jpeg",
       name:   "Kindred Studios",
-      medium: "Jewellery & Mixed Media",
+      medium: "Web of Life — Exhibition",
       floor:  "Floors 1–3"
     },
     {
@@ -90,16 +104,63 @@ window.KIOSK_CONTENT = {
       floor:  "Floors 1–3"
     },
     {
-      image:  "images/emilia-01.jpg",
+      image:  "images/emilia-bridal-01.webp",
       name:   "Emilia Wickstead",
-      medium: "Womenswear",
-      floor:  "Floor 4"
+      medium: "Bridal 2026 × Yoko London",
+      floor:  "Floor 4",
+      logo:   "images/emilia-logo.png",
+      layout: "split",
+      fact:   "Fifty years of pearl craftsmanship meets Wickstead's architectural silhouettes — a new bridal collaboration, London-made."
+    },
+    {
+      image:  "images/emilia-bridal-02.webp",
+      name:   "Emilia Wickstead",
+      medium: "Bridal 2026",
+      floor:  "Floor 4",
+      logo:   "images/emilia-logo.png",
+      layout: "split",
+      fact:   "Refined silhouettes, elegant restraint — pearls chosen to symbolise love, purity and new beginnings."
+    },
+    // Brand film — PAUSED, not in screens[] below. Even shown small (videoSize)
+    // the source clip still looked too blurry. Left here in case a
+    // higher-quality file replaces it later — just add
+    // { type: "gallery", galleryIndex: 6, duration: 25000 } back to screens[]
+    // (right before index 4 to keep it ahead of the other Emilia slides).
+    {
+      video:     "videos/emilia-brand-film.mp4",
+      videoSize: "55%",
+      name:      "Emilia Wickstead",
+      medium:    "Brand Film",
+      floor:     "Floor 4",
+      logo:      "images/emilia-logo.png"
     },
     {
       image:  "images/perfect-moment-01.jpg",
       name:   "Perfect Moment",
       medium: "Luxury Activewear",
       floor:  "Floor 5"
+    },
+    // Editorial diptych — two photos side by side. Swap either path any time.
+    {
+      images: [
+        "images/perfect-moment-editorial-01.avif",
+        "images/perfect-moment-editorial-02.avif"
+      ],
+      name:   "Perfect Moment",
+      medium: "Editorial",
+      floor:  "Floor 5",
+      logo:   "images/perfect-moment-logo.png"
+    },
+    // Brand film — plays muted and looping. Swap the `video` file any time.
+    {
+      video:       "videos/perfect-moment-brand-film.mp4",
+      name:        "Perfect Moment",
+      medium:      "Brand Film",
+      floor:       "Floor 5",
+      logo:        "images/perfect-moment-logo.png",
+      eyebrow:     "Watch",
+      fact:        "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
+      overlayText: "Ski in your Perfect Moment"
     }
   ],
 
@@ -111,12 +172,8 @@ window.KIOSK_CONTENT = {
   eventsTitle:   "Sessions & Events",
 
   upcomingEvents: [
-    // Add dated events from kindredstudios.co.uk/calendar as they appear
-    // e.g. { date: "2026-07-12", title: "Open Studios" }
-    { date: "2026-07-15", title: "Sculpting Hearts" },
-    { date: "2026-07-21", title: "Adult Football" },
-    { date: "2026-07-23", title: "Growing Herbs" },
-    { date: "2026-07-30", title: "Reggae Aerobics" }
+    { date: "2026-06-28", title: "Open Studios" }
+    // Add more from kindredstudios.co.uk/calendar as they appear
   ],
 
   recurringEvents: [

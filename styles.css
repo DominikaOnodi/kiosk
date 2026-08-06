@@ -154,10 +154,24 @@ html { scrollbar-width: none; }
   position: absolute;
   top: clamp(20px, 2.8vh, 44px);
   right: var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+/* Shown only on the directory screen, above the TSP logo */
+.tsp-wordmark-label {
+  font-family: var(--sans);
+  font-size: clamp(10px, 0.6vw, 12px);
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: clamp(8px, 1.2vh, 14px);
 }
 
 .tsp-logo-img {
-  height: clamp(56px, 7vh, 100px);
+  height: clamp(64px, 8vh, 112px);
   width: auto;
   display: block;
   filter: invert(1);
@@ -248,14 +262,77 @@ html { scrollbar-width: none; }
   min-height: 0;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.06);
+  position: relative;
 }
 
-.gallery-visual img {
+/* Rebuilt on every render (img/video/placeholder swapped in here) */
+.gallery-media {
   width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+}
+
+/* Videos shown a little smaller than full-bleed — source resolution is
+   lower than the display, so stretching edge-to-edge looked blurry. */
+.gallery-media .gallery-video {
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  border: 0;
+}
+
+/* Editorial diptych — two photos side by side, full height, thin navy seam
+   between (flat, no shadow, in keeping with the rest of the kiosk). Each
+   panel crops tight (cover) for a high-fashion spread feel. */
+.gallery-duo {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 2px;
+  background: var(--navy);
+}
+
+.gallery-media .gallery-duo img {
+  flex: 1;
+  min-width: 0;
+  width: auto;
   height: 100%;
   object-fit: cover;
   object-position: center;
   display: block;
+}
+
+/* Hero-style headline overlaid directly on the photo/video, e.g. "Ski in
+   your Perfect Moment" — shown only when a gallery item sets `overlayText`. */
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 8%;
+  pointer-events: none;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(28px, 4.2vw, 64px);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.55), 0 0 60px var(--navy);
 }
 
 /* Placeholder when no image is available */
@@ -277,16 +354,61 @@ html { scrollbar-width: none; }
   color: var(--ink-mid);
 }
 
+/* Tenant logo — overlaid top-left on the photo (default layout) */
+.gallery-logo-wrap {
+  position: absolute;
+  top: clamp(20px, 2.8vh, 44px);
+  left: var(--pad-x);
+}
+
+.gallery-logo-img {
+  height: clamp(30px, 3.6vh, 52px);
+  width: auto;
+  display: block;
+  filter: invert(1);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+}
+
 /* Caption bar at bottom */
 .gallery-caption {
   flex-shrink: 0;
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 40px;
+  flex-direction: column;
+  gap: clamp(10px, 1.4vh, 18px);
   padding: clamp(18px, 2.2vh, 32px) clamp(32px, 4.5vw, 72px);
   background: var(--navy);
   border-top: 1px solid var(--rule);
+}
+
+/* Section label (e.g. "Latest Arrivals") — shown above the fact when present */
+.gallery-eyebrow {
+  font-family: var(--sans);
+  font-size: clamp(11px, 0.65vw, 13px);
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  display: none;
+}
+
+/* Fun fact / editorial note — shown above name & meta when present */
+.gallery-fact {
+  font-family: var(--sans);
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(16px, 1.5vw, 24px);
+  line-height: 1.45;
+  color: var(--ink);
+  max-width: 68ch;
+  display: none;
+}
+
+.gallery-caption-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 40px;
 }
 
 .gallery-name {
@@ -306,6 +428,50 @@ html { scrollbar-width: none; }
   color: var(--ink-mid);
   white-space: nowrap;
 }
+
+/* Layout modifier — text panel on the left, photo on the right.
+   Used for portrait editorial photos, which leave dead space either
+   side when full-bleed. Set via gallery item's `layout: "split"`. */
+.screen--gallery.layout-split {
+  flex-direction: row;
+}
+
+.layout-split .gallery-visual {
+  order: 2;
+  flex: 1.15;
+  min-width: 0;
+}
+
+.layout-split .gallery-caption {
+  order: 1;
+  flex: 0 0 clamp(320px, 34vw, 560px);
+  justify-content: center;
+  border-top: none;
+  border-right: 1px solid var(--rule);
+  padding: var(--pad-y) clamp(28px, 4vw, 64px);
+}
+
+.layout-split .gallery-logo-wrap {
+  position: absolute;
+  top: clamp(20px, 2.8vh, 44px);
+  left: clamp(28px, 4vw, 64px);
+  margin-bottom: 0;
+}
+
+.layout-split .gallery-logo-img {
+  height: clamp(44px, 6vh, 84px);
+}
+
+.layout-split .gallery-fact {
+  max-width: none;
+}
+
+.layout-split .gallery-caption-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
 
 
 /* ═══════════════════════════════════════════════════

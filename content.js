@@ -40,7 +40,9 @@ window.KIOSK_CONTENT = {
   // (shown as their logo — falls back to text if the image fails to load).
   floors: [
     { floor: "Ground", tenants: ["Café", "Reception", "Kindred Workshop Rooms"] },
-    { floor: "1–3",    tenants: [{ name: "Kindred Studios",  logo: "images/kindred-logo.png" }] },
+    // logoHeight override — Kindred's logo was reading noticeably smaller
+    // than Emilia's/Perfect Moment's at the shared default size.
+    { floor: "1–3",    tenants: [{ name: "Kindred Studios",  logo: "images/kindred-logo.png", logoHeight: "clamp(46px, 4.9vw, 80px)" }] },
     { floor: "4",      tenants: [{ name: "Emilia Wickstead", logo: "images/emilia-logo.png" }] },
     // logoHeight overrides the default size — Perfect Moment's logo file has
     // more internal padding than the others, so it reads smaller at the same height.
@@ -56,7 +58,7 @@ window.KIOSK_CONTENT = {
 
   facts: [
     "64,000 sq ft across six floors, overlooking the Grand Union Canal.",
-    "BREEAM Excellent and EPC A certified — West London's most sustainable creative workplace.",
+    "BREEAM Excellent and EPC A certified.\nWest London's most sustainable creative workplace.",
     "Carbon-neutral timber structure. NLA Environmental Prize, 2021.",
     "655 tonnes of CO₂ saved by retaining the building's original concrete columns.",
     "A green roof supports canal-side ecology, alongside photovoltaic power and solar shading.",
@@ -96,10 +98,14 @@ window.KIOSK_CONTENT = {
       floor:  ""
     },
     {
-      image:  "images/kindred-event.jpeg",
-      name:   "Kindred Studios",
-      medium: "Web of Life — Exhibition",
-      floor:  "Floors 1–3"
+      image:    "images/kindred-event.jpeg",
+      // nameLogo replaces the plain text name with a logo image, in the
+      // exact same spot/size in the caption row (not the top-left overlay
+      // or footer-block treatments `logo` normally gets).
+      nameLogo: "images/kindred-logo.png",
+      name:     "Kindred Studios",
+      medium:   "Web of Life — Exhibition",
+      floor:    "Floors 1–3"
     },
     {
       image:  "images/kindred-02.jpg",
@@ -145,26 +151,27 @@ window.KIOSK_CONTENT = {
       floor:  "Floor 5"
     },
     // Editorial diptych — two photos side by side. Swap either path any time.
+    // Uses the logo (in the name slot) instead of text, matching the brand
+    // film slide, so Perfect Moment reads consistently across both screens.
     {
-      images: [
+      images:   [
         "images/perfect-moment-editorial-01.avif",
         "images/perfect-moment-editorial-02.avif"
       ],
-      name:   "Perfect Moment",
-      medium: "Editorial",
-      floor:  "Floor 5",
-      logo:   "images/perfect-moment-logo.png"
+      nameLogo: "images/perfect-moment-logo.png",
+      name:     "Perfect Moment",
+      medium:   "Editorial",
+      floor:    "Floor 5"
     },
     // Brand film — plays muted and looping. Swap the `video` file any time.
     {
-      video:        "videos/perfect-moment-brand-film.mp4",
-      name:         "", // logo (in footer) already shows the name — no need to repeat it as text
-      medium:       "Brand Film",
-      floor:        "Floor 5",
-      logo:         "images/perfect-moment-logo.png",
-      logoPosition: "footer",
-      fact:         "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
-      overlayText:  "Ski in your Perfect Moment"
+      video:       "videos/perfect-moment-brand-film.mp4",
+      nameLogo:    "images/perfect-moment-logo.png",
+      name:        "Perfect Moment",
+      medium:      "Brand Film",
+      floor:       "Floor 5",
+      fact:        "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
+      overlayText: "Ski in your Perfect Moment"
     }
   ],
 
@@ -191,7 +198,12 @@ window.KIOSK_CONTENT = {
 
   tsp: {
     name: "TSP",
-    logo: "images/tsp-logo.png"
+    // Regenerated from the original tsp-logo.png, which turned out to be an
+    // opaque white rectangle (not a transparent PNG) — the old invert+screen
+    // CSS trick to fake transparency against navy broke down against the
+    // story screen's photo background. This version has real alpha and is
+    // pre-coloured cream, so it composites cleanly on any backdrop.
+    logo: "images/tsp-logo-transparent.png"
   },
 
   kindred: {

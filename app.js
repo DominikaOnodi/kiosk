@@ -146,13 +146,22 @@ function renderStory() {
   if (!data) return;
   const facts = data.facts ?? [];
   if (!facts.length) return;
-  document.getElementById("story-fact").textContent =
-    facts[factCursor % facts.length];
+
+  document.getElementById("story-title").textContent =
+    data.building?.name ?? "The Gramophone Works";
+
+  // Facts may contain "\n" to force a specific line break (e.g. splitting
+  // two sentences onto separate lines) rather than relying on natural wrap.
+  const factText = facts[factCursor % facts.length];
+  document.getElementById("story-fact").innerHTML =
+    escHtml(factText).replace(/\n/g, "<br>");
 
   const bg = document.getElementById("story-bg");
   if (bg && data.storyBackground) {
     bg.style.backgroundImage = `url("${data.storyBackground}")`;
   }
+
+  renderLogo(SCREENS.story, data.tsp);
 }
 
 function renderGallery(idx) {
@@ -162,7 +171,6 @@ function renderGallery(idx) {
   if (!item) return;
 
   SCREENS.gallery.classList.toggle("layout-split", item.layout === "split");
-  SCREENS.gallery.classList.toggle("logo-footer", item.logoPosition === "footer");
 
   const media = document.getElementById("gallery-media");
 
@@ -187,7 +195,20 @@ function renderGallery(idx) {
   overlayEl.textContent  = item.overlayText ?? "";
   overlayEl.style.display = item.overlayText ? "flex" : "none";
 
-  document.getElementById("gallery-name").textContent = item.name ?? "";
+  // nameLogo swaps the plain-text name for a logo image, in the exact same
+  // caption-row slot (unlike `logo`, which overlays top-left on the photo).
+  const nameEl = document.getElementById("gallery-name");
+  if (item.nameLogo) {
+    nameEl.textContent = "";
+    const logoImg = document.createElement("img");
+    logoImg.className = "gallery-name-logo-img";
+    logoImg.alt        = item.name ?? "";
+    logoImg.src        = item.nameLogo;
+    nameEl.appendChild(logoImg);
+  } else {
+    nameEl.textContent = item.name ?? "";
+  }
+
   document.getElementById("gallery-meta").textContent =
     [item.medium, item.floor].filter(Boolean).join("  ·  ");
 
@@ -198,6 +219,19 @@ function renderGallery(idx) {
   const factEl = document.getElementById("gallery-fact");
   factEl.textContent  = item.fact ?? "";
   factEl.style.display = item.fact ? "block" : "none";
+
+  // Default (non-split) layout: fact text sits inline in the caption row,
+  // centred between the name/logo and the meta text, instead of stacked
+  // as its own line above the row. Split layout (Emilia) is untouched —
+  // its fact text and caption row are deliberately laid out separately.
+  const captionRow  = document.getElementById("gallery-caption-row");
+  const captionWrap = document.getElementById("gallery-caption");
+  factEl.classList.toggle("gallery-fact--inline", item.layout !== "split");
+  if (item.layout === "split") {
+    captionWrap.insertBefore(factEl, captionRow);
+  } else {
+    captionRow.insertBefore(factEl, document.getElementById("gallery-meta"));
+  }
 
   const logoWrap = document.getElementById("gallery-logo-wrap");
   const logoImg  = document.getElementById("gallery-logo-img");

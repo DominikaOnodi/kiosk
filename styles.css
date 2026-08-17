@@ -161,14 +161,15 @@ html { scrollbar-width: none; }
 
 /* TSP logo — top-right. `top` matches the screen's own padding (--pad-y) so
    this lines up with the left-side eyebrow text, which sits in normal flow
-   just inside that same padding. */
+   just inside that same padding. Centered (not right-aligned) so the logo
+   sits centred under the "Managed by" label rather than sharing its edge. */
 .tsp-wordmark {
   position: absolute;
   top: var(--pad-y);
   right: var(--pad-x);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
 }
 
 /* Shown only on the directory screen, above the TSP logo */
@@ -528,10 +529,14 @@ html { scrollbar-width: none; }
      bottom padding, so it no longer competes with the fact text for
      vertical space — the fact text (the only remaining flex child) stays
      centred via the parent's `justify-content: center` regardless of
-     how long the label is. */
+     how long the label is. Right inset trimmed a little tighter than the
+     left so the meta line has more room to breathe before it reaches the
+     panel's edge (longer medium/floor strings — e.g. "Bridal 2026 x Yoko
+     London  ·  Floor 4" — were spilling past the dark panel into the
+     photo). */
   position: absolute;
   left: clamp(28px, 4vw, 64px);
-  right: clamp(28px, 4vw, 64px);
+  right: clamp(20px, 3vw, 48px);
   bottom: var(--pad-y);
   flex-direction: column;
   align-items: flex-start;
@@ -542,8 +547,14 @@ html { scrollbar-width: none; }
   font-size: clamp(28px, 2.8vw, 44px);
 }
 
+/* Slightly smaller/tighter than the base .gallery-meta, and allowed to wrap
+   (base is nowrap) as a safety net — guarantees the medium/floor line never
+   overflows into the photo panel, however long it is. */
 .layout-split .gallery-meta {
-  font-size: clamp(17px, 1.3vw, 22px);
+  font-size: clamp(15px, 1.15vw, 19px);
+  letter-spacing: 0.14em;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
 .layout-split .gallery-eyebrow {

@@ -183,8 +183,13 @@ Edit `content.js`, commit, and push to `main` — that's it, no build step.
 - **Fixed Emilia bridal slide 1 (gallery index 4) meta text overflowing into the photo panel:** the medium/floor line ("Bridal 2026 x Yoko London  ·  Floor 4") is longer than slide 2's and, with `white-space: nowrap` on `.gallery-meta`, was overflowing past the dark caption panel's right edge into the photo. Fixed in `.layout-split .gallery-meta`: smaller font (`clamp(17px,1.3vw,22px)` → `clamp(15px,1.15vw,19px)`), tighter letter-spacing (0.22em → 0.14em), and `white-space: normal` + `overflow-wrap: break-word` as a safety net so it wraps rather than overflows if it's ever still too long for a given screen. Also trimmed `.layout-split .gallery-caption-row`'s right inset (`clamp(28px,4vw,64px)` → `clamp(20px,3vw,48px)`) to give the line a bit more room. Shared rule — applies identically to both Emilia bridal slides, so slide 2's meta line is now marginally smaller/tighter too (was already fitting fine, just kept visually consistent with slide 1).
 - Not verified with an automated screenshot (still no Node/Playwright on this machine, same limitation noted earlier this session) — changes are CSS-only and structurally guarantee no overflow (shrink-to-fit + wrap), but worth a manual eyeball on the real kiosk screen next time someone's on site.
 
+### Session 6 — 18 August 2026
+- **Story screen TSP credit shortened:** "Managed by TSP" → "Managed by" (logo underneath still identifies TSP), matching the directory screen's wording from session 5's follow-up. Directory and Story screens' wordmark labels are now consistent.
+- **Emilia bridal slide 1 meta line (medium · floor) fixed to fit on one line:** "Bridal 2026 × Yoko London  ·  Floor 4" was wrapping with "Floor" and "4" split across two lines. Shrank `.layout-split .gallery-meta` further (font-size clamp `15–19px` → `12–16px`, letter-spacing `0.14em` → `0.1em`); shared rule, so slide 2's shorter meta line is marginally smaller too but was already fitting fine.
+- Not verified with an automated screenshot (still no Node/Playwright on this machine) — worth a manual eyeball on the real kiosk screen.
+
 ### In Progress
-*(nothing — clean end to session 5)*
+*(nothing — clean end to session 6)*
 
 ### Next Up
 - Client is gathering more material for **both Kindred and Perfect Moment** — expect more photos/video next session

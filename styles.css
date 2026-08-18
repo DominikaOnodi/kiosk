@@ -551,8 +551,8 @@ html { scrollbar-width: none; }
    (base is nowrap) as a safety net — guarantees the medium/floor line never
    overflows into the photo panel, however long it is. */
 .layout-split .gallery-meta {
-  font-size: clamp(15px, 1.15vw, 19px);
-  letter-spacing: 0.14em;
+  font-size: clamp(12px, 0.95vw, 16px);
+  letter-spacing: 0.1em;
   white-space: normal;
   overflow-wrap: break-word;
 }

@@ -22,6 +22,7 @@ window.KIOSK_CONTENT = {
   // galleryIndex = which entry in the gallery array below to show.
 
   screens: [
+    { type: "gallery",   galleryIndex: 10, duration: 5000 },
     { type: "directory", duration: 22000 },
     { type: "story",     duration: 13000 },
     // Events screen paused — only Life Drawing is still weekly, not enough
@@ -72,8 +73,9 @@ window.KIOSK_CONTENT = {
   ],
 
   // ── Gallery images ────────────────────────────────────
-  // Indices 2 (Kindred), 4, 5 (Emilia photos), 8 (Perfect Moment diptych) and 9
-  // (Perfect Moment brand film) are active (referenced in screens above).
+  // Indices 2 (Kindred), 4, 5 (Emilia photos), 8 (Perfect Moment diptych), 9
+  // (Perfect Moment brand film) and 10 (Welcome slide, shown first) are active
+  // (referenced in screens above).
   // Index 0 (building exterior) is used as the story background only, not a gallery slide.
   // Indices 1 (building info), 3 (Kindred, second photo), 6 (Emilia brand film —
   // paused, too blurry), 7 (Perfect Moment photo) are ready but not shown yet —
@@ -172,6 +174,16 @@ window.KIOSK_CONTENT = {
       floor:       "Floor 5",
       fact:        "Hit the slopes everywhere and anywhere — make it a Perfect Moment.",
       overlayText: "Ski in your Perfect Moment"
+    },
+    // Welcome slide — first thing shown on the rotation, brief (5s, see
+    // screens[] above). Image has its own "Welcome to The Gramophone Works" /
+    // "Managed by TSP" text baked in, so no separate caption content added —
+    // same minimal-caption treatment as the Kindred exhibition poster (index 2).
+    {
+      image:  "images/Welcome-Display.png",
+      name:   "The Gramophone Works",
+      medium: "",
+      floor:  ""
     }
   ],
 

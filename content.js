@@ -40,14 +40,14 @@ window.KIOSK_CONTENT = {
   // A tenant is either a plain string (shown as text) or { name, logo }
   // (shown as their logo — falls back to text if the image fails to load).
   floors: [
-    { floor: "Ground", tenants: ["Café", "Reception", "Kindred Workshop Rooms"] },
+    // logoHeight overrides the default size — Perfect Moment's logo file has
+    // more internal padding than the others, so it reads smaller at the same height.
+    { floor: "5",      tenants: [{ name: "Perfect Moment", logo: "images/perfect-moment-logo.png", logoHeight: "clamp(48px, 5.2vw, 84px)" }] },
+    { floor: "4",      tenants: [{ name: "Emilia Wickstead", logo: "images/emilia-logo.png" }] },
     // logoHeight override — Kindred's logo was reading noticeably smaller
     // than Emilia's/Perfect Moment's at the shared default size.
     { floor: "1–3",    tenants: [{ name: "Kindred Studios",  logo: "images/kindred-logo.png", logoHeight: "clamp(46px, 4.9vw, 80px)" }] },
-    { floor: "4",      tenants: [{ name: "Emilia Wickstead", logo: "images/emilia-logo.png" }] },
-    // logoHeight overrides the default size — Perfect Moment's logo file has
-    // more internal padding than the others, so it reads smaller at the same height.
-    { floor: "5",      tenants: [{ name: "Perfect Moment", logo: "images/perfect-moment-logo.png", logoHeight: "clamp(48px, 5.2vw, 84px)" }] }
+    { floor: "Ground", tenants: ["Café", "Reception", "Kindred Workshop Rooms"] }
   ],
 
   // ── Story screen background ───────────────────────────

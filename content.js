@@ -100,13 +100,13 @@ window.KIOSK_CONTENT = {
       floor:  ""
     },
     {
-      image:    "images/kindred-event.jpeg",
+      image:    "images/chilli-fest.png",
       // nameLogo replaces the plain text name with a logo image, in the
       // exact same spot/size in the caption row (not the top-left overlay
       // or footer-block treatments `logo` normally gets).
       nameLogo: "images/kindred-logo.png",
       name:     "Kindred Studios",
-      medium:   "Web of Life — Exhibition",
+      medium:   "Chilli Fest",
       floor:    "Floors 1–3"
     },
     {
